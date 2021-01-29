@@ -1,0 +1,127 @@
+<div class="text-center">
+    <div class="mb-5">
+        
+        <h1 style="font-weight:bold">
+            <br/>
+            <img
+            style="width: 7%"
+            src="https://firebasestorage.googleapis.com/v0/b/covid-19-db8a1.appspot.com/o/expensesicon.png?alt=media&token=7b752259-527b-4a30-8d87-bb48c825bab7"
+            alt="covid-19 image"
+            />
+            COVID-19</h1>
+        <h3 class="text-secondary" style="font-weight:bold">Live Updates and Statistics</h3>
+    </div>
+</div>
+<div class="p-3 mb-2 text-white bg-dark" style="font-weight:bold" colspan="2" align="center"><a routerLink= "/homepage">Worldwide</a>  >  {{name1}}</div>
+
+<br/>
+<br/>
+<div class="p-3 mb-2 bg-light text-dark" style="font-weight:bold" colspan="2">Corona Virus Summary Worldwide in {{name1}}</div>
+
+<table class="table table-bordered table-striped"
+>    
+    <tbody>
+        <tr style="background-color:#ffe29a">
+            <td>Total cases</td>
+            <td align="right">{{tcases | number}}</td>
+        </tr>
+        <tr style="background-color:#ffe29a">
+            <td>New Cases</td>
+            <td align="right">{{ncases | number}}</td>
+        </tr>
+        <tr style="background-color:#ffe29a">
+            <td>Active Cases</td>
+            <td align="right">{{activeCases | number}}</td>
+        </tr>
+        <tr style="background-color:#86c7f3">
+            <td>Total recovered</td>
+            <td align="right">{{trecovered | number}}     </td>
+        </tr>
+        <tr style="background-color:#86c7f3">
+            <td>New Recovered</td>
+            <td align="right">{{nrecovered | number}}</td>
+        </tr>
+        <tr style="background-color:#86c7f3">
+            <td>Recovery Rate</td>
+            <td align="right">{{recoveryRate}}%</td>
+        </tr>
+        <tr style="background-color:#ffa1b5">
+            <td>Total Deaths</td>
+            <td align="right">{{tdeaths | number}}</td>
+        </tr>
+        <tr style="background-color:#ffa1b5">
+            <td>New Deaths</td>
+            <td align="right">{{ndeaths | number}}</td>
+        </tr>
+        <tr style="background-color:#ffa1b5">
+            <td>Mortality Rate</td>
+            <td align="right">{{mortalityRate}}%</td>
+        </tr>
+    </tbody>
+</table>
+
+<br/>
+<br/>
+
+<div class="p-3 mb-2 bg-light text-dark" style="font-weight:bold" colspan="2">Corona Virus Cases Distribution in {{name1}}</div>
+    
+<table class="table table-striped">
+    <div class="text-center">
+        <div class="chartjs-container">
+            <canvas 
+            baseChart 
+            [data]="pieChartData"
+            [labels]="pieChartLabels" 
+            [chartType]="pieChartType"
+            [options]="pieChartOptions"
+            [plugins]="pieChartPlugins"
+            [colors]="pieChartColors"
+            [legend]="pieChartLegend">
+            </canvas>
+        </div>
+    </div>
+</table>
+<br/>
+<br/>
+
+<div class="p-3 mb-2 bg-light text-dark" style="font-weight:bold" colspan="2">Daily Corona Virus Cases in {{name1}}</div>
+
+<table class="table table-striped">
+    <div class="text-center">
+        <div class="chartjs-container">
+            <canvas 
+            baseChart 
+            [datasets]="barChartData" 
+            [labels]="barChartLabels" 
+            [options]="barChartOptions"
+            [plugins]="barChartPlugins" 
+            [legend]="barChartLegend" 
+            [chartType]="barChartType">
+            </canvas>
+        </div>
+    </div>
+</table>
+
+<br/>
+<br/>
+
+<div class="p-3 mb-2 bg-light text-dark" style="font-weight:bold" colspan="2">Total Corona Virus Cases in {{name1}}</div>
+
+<table class="table table-striped">
+    <div class="text-center">
+        <div class="chartjs-container">
+            <canvas 
+            baseChart 
+            [datasets]="lineChartData" 
+            [labels]="lineChartLabels" 
+            [options]="lineChartOptions"
+            [colors]="lineChartColors" 
+            [legend]="lineChartLegend" 
+            [chartType]="lineChartType" 
+            [plugins]="lineChartPlugins">
+            </canvas>
+        </div>
+    </div>
+</table>
+<br/>
+<div class="p-3 mb-2 bg-light text-dark" align="center" colspan="2">Data Source: <a href="https://covid19api.com"> COVID-19 API</a><font style="color:rgb(58, 94, 255);"> / </font><a href="https://coronavirus.jhu.edu/map.html">Johns Hopkins CSSE</a></div>
