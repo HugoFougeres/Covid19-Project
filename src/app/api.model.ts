@@ -27,7 +27,7 @@ export class Country extends Global {
     Date: Date;  
     Slug: string;
 
-    constructor(Country: string,
+    /*constructor(Country: string,
         CountryCode: string,
         NewConfirmed: number,
         TotalConfirmed: number,
@@ -48,7 +48,7 @@ export class Country extends Global {
             this.TotalRecovered= TotalRecovered;
             this.Date= Date;
             this.Slug=Slug;
-        }
+        }*/
 } 
 
 export class  World {

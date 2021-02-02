@@ -25,6 +25,7 @@
     "bootstrap": "^4.5.3",
     "chart.js": "^2.9.4",
     "firebase": "^8.2.3",
+    "igniteui-angular": "^11.0.12",
     "jquery": "^3.5.1",
     "ng2-charts": "^2.4.2",
     "popper.js": "^1.16.1",

@@ -7,6 +7,7 @@ import {DatePipe, Location} from '@angular/common';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Color, Label, monkeyPatchChartJsLegend, monkeyPatchChartJsTooltip } from 'ng2-charts';
 
+
 @Component({
   selector: 'app-country',
   templateUrl: './country.component.html',
@@ -15,6 +16,7 @@ import { Color, Label, monkeyPatchChartJsLegend, monkeyPatchChartJsTooltip } fro
 export class CountryComponent implements OnInit {
 
   country: Country;
+  country1: Country;
   name: string;
   summary: Summary;
   activeCases: number;
@@ -115,10 +117,8 @@ export class CountryComponent implements OnInit {
   constructor(public covidService: CovidService, private http: HttpClient, private route: ActivatedRoute, private location: Location, private datePipe: DatePipe) {
     monkeyPatchChartJsTooltip();
     monkeyPatchChartJsLegend();
-    this.getAllData();
-    
-    
-    
+    this.country1 = new Country();
+    this.getAllData(); 
    }
 
   ngOnInit(): void {
@@ -149,46 +149,55 @@ export class CountryComponent implements OnInit {
   getAllData() {
      
     this.covidService.getData().subscribe(  
-      response => {  
+      async response => {  
         this.summary= response;
         
         for(let i in this.summary.Countries){
+
           if(this.summary.Countries[i].Slug == this.name){
 
             this.name1 = this.summary.Countries[i].Country;
             this.country= this.summary.Countries[i];
-
-
-            this.tcases = this.summary.Countries[i].TotalConfirmed;
-            this.trecovered = this.summary.Countries[i].TotalRecovered;
-            this.tdeaths = this.summary.Countries[i].TotalDeaths;
-            this.ncases= this.summary.Countries[i].NewConfirmed;
-            this.nrecovered= this.summary.Countries[i].NewRecovered;
-            this.ndeaths= this.summary.Countries[i].NewDeaths;
-            this.activeCases= this.country.TotalConfirmed - this.country.TotalRecovered;
-            this.mortalityRate= Math.round((this.country.TotalDeaths / this.country.TotalConfirmed) * 10000)/100;
-            this.recoveryRate= Math.round((this.country.TotalRecovered / this.country.TotalConfirmed) * 10000)/100;
-            this.pieChartData= [this.country.TotalDeaths, this.country.TotalRecovered, this.country.TotalConfirmed];
+            await this.covidService.addCountryfirebase(this.country);
+           
+            this.covidService.getCountryfirebase(this.country.Slug).subscribe((data)=>
+            {
+              try{
+                this.country1.Country= data!["country"];
+                this.country1.NewConfirmed= data!["newconfirmed"];
+                this.country1.NewDeaths= data!["newdeaths"];
+                this.country1.NewRecovered= data!["newrecovered"];
+                this.country1.Slug= data!["slug"];
+                this.country1.TotalConfirmed= data!["totalconfirmed"];
+                this.country1.TotalDeaths= data!["totaldeaths"];
+                this.country1.TotalRecovered= data!["totalrecovered"];
+                this.activeCases= this.country1.TotalConfirmed - this.country1.TotalRecovered;
+            this.mortalityRate= Math.round((this.country1.TotalDeaths / this.country1.TotalConfirmed) * 10000)/100;
+            this.recoveryRate= Math.round((this.country1.TotalRecovered / this.country1.TotalConfirmed) * 10000)/100;
+            this.pieChartData= [this.country1.TotalDeaths, this.country1.TotalRecovered, this.country1.TotalConfirmed];
             this.pieChartLabels= ['Dead Cases', 'Recovered Cases', "Active Cases"];
             this.pieChartColors= [
               {
                 backgroundColor: ['rgba(228, 114, 139, 1)','rgba(136, 172, 240, 1)','rgba(228, 207, 114, 1)'],
               },
             ];
+                console.log(this.country1)
+              }catch{
+                this.getAllData();
+              }
+            });
+
+            
             this.pieChartType= 'pie';
             this.pieChartLegend=true;
             this.pieChartPlugins= [];
-            this.covidService.addCountryfirebase(this.country);
-            this.ncountry=this.country.Country;
+            
+            this.ncountry=this.country1.Country;
             this.getAllData2(); 
             this.getAllData3();
             
           }
-          
-
-        }
-        
-        
+        }   
       }         
     );
 
@@ -196,8 +205,6 @@ export class CountryComponent implements OnInit {
   }
 
   getAllData2() { 
-
-
     this.covidService.getDatacountry(this.name, "https://api.covid19api.com/country/").subscribe(
       response5 => {
         this.country= response5;
@@ -233,9 +240,6 @@ export class CountryComponent implements OnInit {
         ];
       }
     );
-
-    
-
 
   }
 
@@ -277,6 +281,9 @@ export class CountryComponent implements OnInit {
        
       }
     );
+  }
+  addCountries(){
+      
   }
 }
 

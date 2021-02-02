@@ -43,12 +43,6 @@ export class CovidService {
     .pipe((response3)=>response3);
   }
 
-  getDatac(slug: string, url6: string): Observable<any> { 
-    url6= url6.concat(slug);
-    return this.http.get(url6)  
-      .pipe((response4) => response4);  
-  }  
-
   getDatacountry(slug: string, url4: string): Observable<any>{
     url4=url4.concat(slug);
     this.date.setDate(this.date.getDate()-1);
@@ -101,38 +95,42 @@ export class CovidService {
     if(doc.exists){
       let array: any[] =[];
       array.push(doc.data());
-      if(array[0].name != country.Slug ||
+      if(
+        array[0].country != country.Country ||
         array[0].newdeaths != country.NewDeaths ||
         array[0].totaldeaths != country.TotalDeaths ||
         array[0].newrecovered != country.NewRecovered ||
         array[0].totalrecovered != country.TotalRecovered || 
         array[0].newconfirmed != country.NewConfirmed || 
-        array[0].totalconfirmed != country.TotalConfirmed){
+        array[0].totalconfirmed != country.TotalConfirmed ||
+        array[0].name != country.Slug ){
           this.firestore.collection("countries").doc(country.Slug).set({
-            name: country.Slug,
+            country: country.Country,
             newdeaths: country.NewDeaths,
             newrecovered: country.NewRecovered,
             newconfirmed: country.NewConfirmed,
             totaldeaths: country.TotalDeaths,
             totalrecovered: country.TotalRecovered,
-            totalconfirmed: country.TotalConfirmed
+            totalconfirmed: country.TotalConfirmed,
+            slug: country.Slug
           }, {merge: true});
         }
     }else{
       this.firestore.collection("countries").doc(country.Slug).set({
-        name: country.Slug,
+        country: country.Country,
         newdeaths: country.NewDeaths,
         newrecovered: country.NewRecovered,
         newconfirmed: country.NewConfirmed,
         totaldeaths: country.TotalDeaths,
         totalrecovered: country.TotalRecovered,
-        totalconfirmed: country.TotalConfirmed
+        totalconfirmed: country.TotalConfirmed,
+        slug: country.Slug
       }, {merge: true});
     }
     })
   }
 
-  getCountryfirebase(slug : string)
+  getCountryfirebase(slug : string): Observable<any>
   {
     return this.firestore.collection("countries")
     .doc(slug).valueChanges();
